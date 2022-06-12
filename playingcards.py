@@ -9,6 +9,9 @@ class Suit(Enum):
 	def __str__(self):
 		return f"{self.name[0]}{self.name[1:].lower()}"
 
+	def __repr__(self):
+		return f"Suit.{self.name}"
+
 
 class Card:
 
@@ -30,9 +33,29 @@ class Card:
 			case 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10:
 				return f"{value}"
 
+	def __str__(self):
+		return f"{self.name} of {self.suit}"
 
-print(Suit)
-print(Suit.HEARTS)
-print(Suit.DIAMONDS)
-print(Suit.CLUBS)
-print(Suit.SPADES)
+	def __repr__(self):
+		return f"Card({repr(self.suit)}, {self.value})"
+
+
+class Deck:
+	def __init__(self):
+		self.deck = self._create_deck()
+
+
+	def _create_deck(self):
+		deck = []
+
+		for new_suit in Suit:
+			for value in range(1, 14):
+				deck.append(Card(new_suit, value))
+
+		return deck
+
+	def print_cards(self):
+		for card in self.deck:
+			print(card)
+
+			
