@@ -1,4 +1,5 @@
-# Created by Kenneth Reichelderfer Jr *
+# Created by Kenneth Reichelderfer Jr
+# Date: 6/11/2022
 #
 # **************************************************************************
 # Classes: 
@@ -67,6 +68,8 @@
 #
 #     2. Deck.draw() - Removes the last card object from Deck.deck, adds
 #                        it to Deck.used, and returns the removed card obj
+#                        If Deck.deck has no card objects when called, it
+#                        will return None.
 #
 #   Example usage:
 #     # Initializes my_deck as a Deck object and starts with a randomized
@@ -94,6 +97,26 @@
 from enum import Enum, auto
 import random
 
+class InvalidCardSuit(Exception):
+	def __init__(self, suit, message="The provided suit is not a valid option. Please use the Suit Class Enum, e.g. Suit.HEARTS"):
+		self.suit = suit
+		self.message = message
+		super().__init__(self.message)
+
+	def __str__(self):
+		return f"{self.suit} -> {self.message}"
+
+
+class InvalidCardValue(Exception):
+	def __init__(self, value, message="The provided value must be between 1-13 inclusive"):
+		self.value = value
+		self.message = message
+		super().__init__(self.message)
+
+	def __str__(self):
+		return f"{self.value} -> {self.message}"
+
+
 class Suit(Enum):
 	HEARTS = auto()
 	DIAMONDS = auto()
@@ -109,6 +132,10 @@ class Suit(Enum):
 
 class Card:
 	def __init__(self, suit, value):
+		if not isinstance(suit, Suit):
+			raise InvalidCardSuit(suit)
+		if value not in range(1, 14):
+			raise InvalidCardValue(value)
 		self.suit = suit
 		self.value = value
 		self.name = self._get_name(value)
@@ -141,14 +168,14 @@ class Deck:
 
 	def _create_deck(self):
 		deck = []
-
+		
 		for new_suit in Suit:
 			for value in range(1, 14):
 				deck.append(Card(new_suit, value))
 
 		return deck
 
-	def print_cards(self):
+	def _print_cards(self):
 		for card in self.deck:
 			print(f"{card} is in the deck")
 		for card in self.used:
@@ -160,6 +187,9 @@ class Deck:
 		random.shuffle(self.deck)
 
 	def draw(self):
+		if len(self.deck) <= 0:
+			return None
+
 		drawn_card = self.deck.pop()
 		self.used.append(drawn_card)
 		# print(f"You drew the {drawn_card}")
@@ -168,16 +198,16 @@ class Deck:
 
 def main():
 	my_deck = Deck()
-	my_deck.print_cards()
+	my_deck._print_cards()
 	input('Press enter to continue...')
 	my_deck.draw()
 	my_deck.draw()
 	my_deck.draw()
 	input('Press enter to continue...')
-	my_deck.print_cards()
+	my_deck._print_cards()
 	input('Now, we\'re going to shuffle the deck! Press enter to continue...')
 	my_deck.shuffle()
-	my_deck.print_cards()
+	my_deck._print_cards()
 
 
 if __name__ == "__main__":
