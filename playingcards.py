@@ -168,7 +168,7 @@ class Deck:
 
 	def _create_deck(self):
 		deck = []
-		
+
 		for new_suit in Suit:
 			for value in range(1, 14):
 				deck.append(Card(new_suit, value))
@@ -199,11 +199,11 @@ class Deck:
 def main():
 	my_deck = Deck()
 	my_deck._print_cards()
-	input('Press enter to continue...')
+	input('This is the current order of cards from last to first. Press enter to continue...')
 	my_deck.draw()
 	my_deck.draw()
 	my_deck.draw()
-	input('Press enter to continue...')
+	input('Three cards have been drawn. Press enter to continue and see how they are listed now...')
 	my_deck._print_cards()
 	input('Now, we\'re going to shuffle the deck! Press enter to continue...')
 	my_deck.shuffle()
